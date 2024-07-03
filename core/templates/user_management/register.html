@@ -1,0 +1,71 @@
+<!-- templates/user_management/register.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+</head>
+<body>
+    <h2>Register</h2>
+    <form id="registrationForm">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" minlength="8" required><br><br>
+        
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+            <option value="user">User</option>
+            <option value="librarian">Librarian</option>
+        </select><br><br>
+        
+        <button type="button" onclick="submitForm()">Register</button>
+    </form>
+
+    <script>
+        function submitForm() {
+            var form = document.getElementById('registrationForm');
+            var formData = {
+                'name': form.name.value,
+                'email': form.email.value,
+                'password': form.password.value,
+                'role': form.role.value
+            };
+
+            // Send form data as JSON via AJAX
+            fetch("{% url 'register' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                console.log('Success:', data);
+                // Display success message
+                alert('Registration successful');
+                // Redirect to login page
+                window.location.href = '/login';  // Adjust the URL as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Optionally handle error response here
+                alert('Registration failed. Please try again.');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!-- templates/book_management/dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Books List</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>Available</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.genre }}</td>
+                    <td>{{ book.is_available }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h1>Borrow Data</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Book</th>
+                <th>Borrowed By</th>
+                <th>Borrowed At</th>
+                <th>Returned At</th>
+                <th>Is Returned</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in borrow_data %}
+                <tr>
+                    <td>{{ data.book.title }}</td>
+                    <td>{{ data.user.name }}</td>
+                    <td>{{ data.borrowed_at }}</td>
+                    <td>{{ data.return_date }}</td>
+                    <td>{{ data.is_returned }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

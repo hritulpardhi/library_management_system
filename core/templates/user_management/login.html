@@ -1,0 +1,59 @@
+<!-- templates/user_management/login.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            {% csrf_token %}
+            <label for="useremail">User Email:</label>
+            <input type="text" id="useremail" name="useremail" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="button" onclick="submitLoginForm()">Login</button>
+        </form>
+        <p>Don't have an account? <button onclick="location.href='/register';">Register</button></p>
+    </div>
+
+    <script>
+        function submitLoginForm() {
+            var form = document.getElementById('loginForm');
+            var formData = {
+                'username': form.useremail.value,
+                'password': form.password.value
+            };
+
+            fetch('/login/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Network response was not ok.');
+            })
+            .then(data => {
+                console.log('Success:', data);
+                // Optionally handle success response here
+                // For example, redirect to a dashboard page
+                window.location.href = '/dashboard/';  // Adjust the URL as needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Optionally handle error response here
+                alert('Login failed. Please check your email and password.');
+            });
+        }
+    </script>
+</body>
+</html>
